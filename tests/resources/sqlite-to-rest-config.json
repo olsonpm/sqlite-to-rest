@@ -1,0 +1,12 @@
+{
+  "allTablesAndViews": {
+    "flags": [
+      "sendContentRangeInHEAD"
+    ]
+  },
+  "tablesAndViews": {
+    "beer": {
+      "maxRange": 5
+    }
+  }
+}

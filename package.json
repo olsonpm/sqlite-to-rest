@@ -1,0 +1,50 @@
+{
+  "name": "sqlite-to-rest",
+  "version": "0.1.0",
+  "description": "Create a rest api from an existing sqlite3 database",
+  "bin": {
+    "sqlite-to-rest": "bin/sqlite-to-rest.js"
+  },
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olsonpm/sqlite-to-rest.git"
+  },
+  "author": "phil olson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/olsonpm/sqlite-to-rest/issues"
+  },
+  "homepage": "https://github.com/olsonpm/sqlite-to-rest#readme",
+  "dependencies": {
+    "JSONStream": "^1.1.1",
+    "bluebird": "^3.4.0",
+    "create-opinionated-cli": "github:olsonpm/create-opinionated-cli#562d0f8d701217813a7a5ecc217cae17761f4e9a",
+    "deep-freeze-strict": "^1.1.1",
+    "extensionless": "^0.1.0",
+    "koa": "^2.0.0",
+    "koa-bodyparser": "^3.1.0",
+    "koa-decoded-querystring": "0.1.1",
+    "koa-router": "^7.0.1",
+    "lodash": "^4.12.0",
+    "madonna-fp": "github:olsonpm/madonna-fp#cd1914a",
+    "madonna-function": "github:olsonpm/madonna-function#8764bf6245fea2ed3010f605d3f8ca67cf1c574e",
+    "ncp": "^2.0.0",
+    "portfinder": "^1.0.3",
+    "require-dir": "^0.3.0",
+    "sqlite3": "^3.1.4",
+    "through2": "^2.0.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "mocha": "^2.5.3",
+    "request-promise": "^3.0.0"
+  },
+  "engines" : {
+    "node" : "6.x"
+  }
+}

@@ -1,0 +1,55 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE city (
+state, city_name, PRIMARY KEY (state, city_name)
+);
+INSERT INTO "city" VALUES('CO','Boulder');
+INSERT INTO "city" VALUES('WI','Madison');
+INSERT INTO "city" VALUES('WI','New Glarus');
+INSERT INTO "city" VALUES('WI','Milwaukee');
+CREATE TABLE brewery(
+  id integer primary key
+  , state
+  , city_name
+  , name
+  , foreign key (state, city_name) references city(state, city_name)
+);
+INSERT INTO "brewery" VALUES(1,'CO','Boulder','Avery');
+INSERT INTO "brewery" VALUES(2,'CO','Boulder','Upslope');
+INSERT INTO "brewery" VALUES(3,'WI','New Glarus','New Glarus');
+INSERT INTO "brewery" VALUES(4,'WI','Madison','One Barrel');
+INSERT INTO "brewery" VALUES(5,'WI','Madison','n/a');
+CREATE TABLE beer(
+  id integer primary key
+  , brewery_id references brewery (id)
+  , description
+  , name
+);
+INSERT INTO "beer" VALUES(1,1,'An authentic Belgian style white ale, this Rascal is unfiltered and cleverly spiced with coriander and Curaçao orange peel producing a refreshingly zesty classic ale.','White Rascal');
+INSERT INTO "beer" VALUES(2,1,'Avery IPA features a citrusy, floral bouquet and a rich, malty finish.','Avery IPA');
+INSERT INTO "beer" VALUES(3,1,'Chocolate malt gives this beer a brown sugar maltiness with hints of vanilla and nuts, while subtle hopping gives it an overall drinkability that’s second to none.','Ellie''s Brown Ale');
+INSERT INTO "beer" VALUES(4,1,'A contemporary rendition of a classic style, Joe''s is hopped with purpose: beautifully bitter and dry with an abundance of floral, Noble German hops.','Joe''s Pils');
+INSERT INTO "beer" VALUES(5,2,'Drawing inspiration from all over the globe, our Thai Style White IPA is an artful combination of uncommon, yet carefully chosen ingredients. Brewed using Belgian Wit yeast, hopped like an American IPA and infused with seven Asian-inspired spices, this beer is far from traditional. The sharp, juicy citrus notes of the hops interplay with the unique Thai spice blend to create an unexpected, one of a kind refreshment.','Thai Style White IPA');
+INSERT INTO "beer" VALUES(6,2,'This clear, crisp, dry Pale Ale is our signature beer–the one that started it all!  It’s refreshing characteristics, and signature dry finish, blend smooth malt flavors with a unique spicy hop bitterness.  Sure to be the “go-to” beer on any camping trip, fishing excursion or music festival.','Pale Ale');
+INSERT INTO "beer" VALUES(7,2,'Blood oranges and Mandarina Bavaria hops seamlessly complement one another in this saison providing aromatic notes of citrus and bright, juicy flavors. The addition of pink peppercorns amplifies the spicy notes imparted by the saison yeast while balancing the beer’s natural sweetness and dry finish.','Blood Orange Saison');
+INSERT INTO "beer" VALUES(8,2,'Adding organic baby bear pumpkins to malt and hops makes this truly a local farm to brewhouse collaboration. A custom blend of six spices rounds out the flavors in this highly anticipated beer.','Pumpkin Ale');
+INSERT INTO "beer" VALUES(9,3,'Expect this ale to be fun, fruity and satisfying. You know you''re in Wisconsin when you see the Spotted Cow.','Spotted Cow');
+INSERT INTO "beer" VALUES(10,3,'A session beer with a bright bold blend of five hops that flirt obligingly with the smooth malty backside.','Moon Man');
+INSERT INTO "beer" VALUES(11,3,'The collaboration of two Craft companies both led by women, New Glarus Brewing and Weyermann Malting, is unique. You hold the result “Two Women” a Classic Country Lager.','Two Women');
+INSERT INTO "beer" VALUES(12,3,'You hold the happy accident of Wisconsin’s favorite fruit aged in oak with an almost magical wild fermentation.','Serendipity');
+INSERT INTO "beer" VALUES(13,4,'A good example of the American twist on the English classic. It is more of a deep copper than pale gold, as is common for the style, and has a unique malt profile due in large part to the addition of 20% American Wheat Malt. A strong American hop structure provides an enticing aroma of tangerine and grapefruit and smooth finish that will keep you coming back for more.','Penguin Pale Ale');
+INSERT INTO "beer" VALUES(14,4,'This beer is black in color but very smooth and does not have a bitter malt flavor found in many stouts and porters. It is aggressively hopped, including a dry hop addition that gives Banjo Cat a strong citrus aroma and vibrant flavor resulting in a well-balanced black ale.','Banjo Cat');
+INSERT INTO "beer" VALUES(15,4,'This is very true to the style that originated in Koln (Cologne), Germany. Our Kolsch is unfiltered and cold-conditioned. The result is a beer that is clean and refreshing, with a crisp finish. It is agreeable without being boring; the beer lover’s session ale.','Commuter Kolsch');
+INSERT INTO "beer" VALUES(16,5,'Belgian',NULL);
+CREATE VIEW beer_per_brewery(
+  beer_id, beer_name, brewery_state, brewery_city, brewery_name
+)
+as
+select beer.id
+  , beer.name
+  , state
+  , city_name
+  , brewery.name
+from beer
+  join brewery on beer.brewery_id = brewery.id;
+COMMIT;

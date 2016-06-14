@@ -1,0 +1,27 @@
+CREATE TABLE city (
+state, city_name, PRIMARY KEY (state, city_name)
+);
+CREATE TABLE brewery(
+  id integer primary key
+  , state
+  , city_name
+  , name
+  , foreign key (state, city_name) references city(state, city_name)
+);
+CREATE VIEW beer_per_brewery(
+  beer_id, beer_name, brewery_state, brewery_city, brewery_name
+)
+as
+select beer.id
+  , beer.name
+  , state
+  , city_name
+  , brewery.name
+from beer
+  join brewery on beer.brewery_id = brewery.id;
+CREATE TABLE beer(
+  id integer primary key
+  , brewery_id references brewery (id)
+  , description
+  , name
+);
