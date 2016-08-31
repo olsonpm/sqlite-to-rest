@@ -30,8 +30,8 @@
     "koa-decoded-querystring": "0.1.1",
     "koa-router": "^7.0.1",
     "lodash": "^4.12.0",
-    "madonna-fp": "github:olsonpm/madonna-fp#cd1914a",
-    "madonna-function": "github:olsonpm/madonna-function#8764bf6245fea2ed3010f605d3f8ca67cf1c574e",
+    "madonna-fp": "github:olsonpm/madonna-fp#ca65bd4e0ee76d69dbc571db264aa9980387bec8",
+    "madonna-function": "github:olsonpm/madonna-function#7cfd2afb4f2513b017bf197cda557591c63a67d3",
     "ncp": "^2.0.0",
     "portfinder": "^1.0.3",
     "require-dir": "^0.3.0",
@@ -44,7 +44,7 @@
     "mocha": "^2.5.3",
     "request-promise": "^3.0.0"
   },
-  "engines" : {
-    "node" : "6.x"
+  "engines": {
+    "node": "6.x"
   }
 }
