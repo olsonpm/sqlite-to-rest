@@ -217,9 +217,9 @@ describe('unsafe', () => {
         .should.become(exp.success);
     });
 
-    it('should return 400 on non-existent resource', () => {
+    it('should return 404 on non-existent resource', () => {
       return rpt({ qss: 'state=WI&city_name=Eau Claire' }).should.eventually
-        .have.property('statusCode', 400);
+        .have.property('statusCode', 404);
     });
 
     it('should return the correct error responses', () => {
