@@ -31,7 +31,8 @@ simple, with the intent that the API isn't serving heavy loads.
 ## Features
  - Spec compliant CRUD RESTful API to an existing database's tables and views
  - GET utilizes [JSONStream](https://github.com/dominictarr/JSONStream) so the
-   entire response is not held in memory, allowing for arbitrarily large responses.
+   entire response is not held in memory, allowing for arbitrarily
+   large responses.
  - Range requests with the custom range unit 'rows' can be used to GET specific
    rows.  While compliant with rfc7233, the syntax and semantics were kept
    extremely similar to byte-ranges.
@@ -46,9 +47,8 @@ simple, with the intent that the API isn't serving heavy loads.
    descending specifiers
  - The API enforces correct usage, while sending developer-friendly error
    messages upon 4xx errors.
- - Comes with a friendly CLI to generate the database schema out to a json file
-   which is then consumed by the library.  The CLI also allows you to create a
-   bare-bones koa server to get you up and running quickly.
+ - Comes with a friendly CLI to create a bare-bones koa server to get you up and
+   running quickly.
 
 
 ## Limitations

@@ -62,17 +62,17 @@ it for you.
    sqlite> .exit
    ```
 
-   #####End of database steps
+##### End of database steps
 
-6. Time to install sqlite-to-rest globally via npm to gain its cli
+1. Time to install sqlite-to-rest globally via npm to gain its cli
 
    ```sh
-   $ npm i -g olsonpm/sqlite-to-rest
+   $ npm i -g olsonpm/sqlite-to-rest#dev
    ```
 
    *The cli is very friendly and easy to explore via `sqlite-to-rest --help`*
 
-7. And generate a bare-bones koa server to test against.
+2. And generate a bare-bones koa server to test against.
 
    ```sh
    $ sqlite-to-rest generate-skeleton --db-path ./beer.sqlite3
@@ -82,14 +82,14 @@ it for you.
    Finished!
    ```
 
-9. Finally run the server
+3. Finally run the server
 
    ```sh
    $ node skeleton.js
    Listening on port: 8085
    ```
 
-10. And consume!
+4. And consume!
 
    *I have [jq](https://stedolan.github.io/jq/) installed for formatting, though
    the unformatted output isn't terrible*
