@@ -89,7 +89,7 @@ See `sqlite-to-rest --help` for more info.
 
 
 ## API
-`require('sqlite-to-rest')` returns an object with three properties.
+`require('sqlite-to-rest')` returns an object with two properties.
 
  - **generateSkeleton**: [madonna-function](https://github.com/olsonpm/madonna-function)
    -> promise(undefined)  
