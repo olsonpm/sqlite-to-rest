@@ -67,7 +67,7 @@ it for you.
 1. Time to install sqlite-to-rest globally via npm to gain its cli
 
    ```sh
-   $ npm i -g olsonpm/sqlite-to-rest#dev
+   $ npm install --global olsonpm/sqlite-to-rest
    ```
 
    *The cli is very friendly and easy to explore via `sqlite-to-rest --help`*
