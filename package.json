@@ -22,7 +22,7 @@
   "dependencies": {
     "JSONStream": "^1.1.1",
     "bluebird": "^3.4.0",
-    "create-opinionated-cli": "github:olsonpm/create-opinionated-cli",
+    "structured-cli": "github:olsonpm/structured-cli#556f823d84a1db3aaab75f9b31f5ce9487da6fd7",
     "deep-freeze-strict": "^1.1.1",
     "extensionless": "^0.1.0",
     "koa": "^2.0.0",
