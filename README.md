@@ -82,7 +82,7 @@ will walk you through
 By installing this library globally, you receive access to `sqlite-to-rest`.  
 
 The CLI currently contains one command `generate-skeleton` which creates an
-initial bare-bones koa server from an existing sqlite database.1  This should
+initial bare-bones koa server from an existing sqlite database.  This should
 help you get started.
 
 See `sqlite-to-rest --help` for more info.
