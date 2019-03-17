@@ -22,7 +22,6 @@
   "dependencies": {
     "JSONStream": "^1.1.1",
     "bluebird": "^3.4.0",
-    "structured-cli": "github:olsonpm/structured-cli#556f823d84a1db3aaab75f9b31f5ce9487da6fd7",
     "deep-freeze-strict": "^1.1.1",
     "extensionless": "^0.1.0",
     "koa": "^2.0.0",
@@ -35,7 +34,8 @@
     "ncp": "^2.0.0",
     "portfinder": "^1.0.3",
     "require-dir": "^0.3.0",
-    "sqlite3": "^3.1.4",
+    "sqlite3": "^4.0.6",
+    "structured-cli": "github:olsonpm/structured-cli#556f823d84a1db3aaab75f9b31f5ce9487da6fd7",
     "through2": "^2.0.1"
   },
   "devDependencies": {
@@ -44,7 +44,4 @@
     "mocha": "^2.5.3",
     "request-promise": "^3.0.0"
   },
-  "engines": {
-    "node": "6.x"
-  }
 }
