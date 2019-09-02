@@ -6,11 +6,13 @@
 //---------//
 
 const bPromise = require('bluebird')
+  , fp = require('lodash/fp')
   , Koa = require('koa')
   , koaBodyparser = require('koa-bodyparser')
   , path = require('path')
   , portfinder = require('portfinder')
   , sqliteToRest = require('../../lib')
+  , sqliteToRestConfig = require('../resources/sqlite-to-rest-config')
   ;
 
 
@@ -18,7 +20,7 @@ const bPromise = require('bluebird')
 // Init //
 //------//
 
-const dbPath = path.resolve(
+const defaultDbPath = path.resolve(
     path.join(__dirname, '../resources/beer.sqlite3')
   )
   , getSqliteRouter = sqliteToRest.getSqliteRouter
@@ -32,14 +34,19 @@ let server;
 // Main //
 //------//
 
-const startServer = sqliteToRestConfig => {
+const startServer = (
+  {
+    dbPath = defaultDbPath
+    , configOverrides = {}
+  } = {}
+) => {
   const app = new Koa();
   app.use(koaBodyparser());
 
   return bPromise.props({
       router: getSqliteRouter({
           dbPath: dbPath
-          , config: sqliteToRestConfig
+          , config: fp.assign(sqliteToRestConfig, configOverrides)
         })
       , port: getPortAsync()
     })
@@ -56,18 +63,12 @@ const startServer = sqliteToRestConfig => {
 
 const stopServer = () => bPromise.fromCallback(cb => server.close(cb));
 
-const restartServer = sqliteToRestConfig => {
-  stopServer();
-  startServer(sqliteToRestConfig);
-};
-
 
 //---------//
 // Exports //
 //---------//
 
 module.exports = {
-  restartServer: restartServer
-  , startServer: startServer
+  startServer: startServer
   , stopServer: stopServer
 };

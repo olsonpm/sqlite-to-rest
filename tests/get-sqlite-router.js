@@ -10,13 +10,18 @@ const bPromise = require('bluebird')
   , chai = require('chai')
   , chaiAsPromised = require('chai-as-promised')
   , common = require('./helpers/common')
+  , del = require('del')
   , errIds = require('../lib/api/helpers/route-builders/err-ids')
   , expected = require('./expected/get-sqlite-router')
+  , filecompare = require('filecompare')
   , fp = require('lodash/fp')
+  , fs = require('fs')
+  , makeDir = require('make-dir')
   , ncpAsync = bPromise.promisify(require('ncp'))
   , path = require('path')
   , rp = require('request-promise')
-  , sqliteToRestConfig = require('./resources/sqlite-to-rest-config')
+  , request = require('request')
+  , stream = require('stream')
   , utils = require('../lib/utils')
   ;
 
@@ -33,6 +38,29 @@ const mapValuesWithKey = utils.mapValuesWithKey
   , beerDb = path.join(resourcesDir, 'beer.sqlite3')
   , beerDbBak = path.join(resourcesDir, 'beer.sqlite3.bak')
   , queryStringsShouldResultInErrors = getQueryStringsShouldResultInErrors()
+  , bStreamFinished = aStream => {
+    return new bPromise((resolve, reject) => {
+      try {
+        stream.finished(aStream, err => {
+          if (err) reject(err)
+          else resolve(aStream)
+        });
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+  , bAreFilesEqual = (fpath1, fpath2) => {
+    return new bPromise((resolve, reject) => {
+      try {
+        filecompare(fpath1, fpath2, result => {
+          resolve(result);
+        })
+      } catch (e) {
+        reject(e);
+      }
+    })
+  }
   ;
 
 
@@ -45,8 +73,9 @@ describe('safe', () => {
     let rpt;
 
     before(() => {
-      const config = fp.assign(sqliteToRestConfig, { prefix: '/api' });
-      return common.startServer(config)
+      const configOverrides = { prefix: '/api' };
+
+      return common.startServer({ configOverrides })
         .then(port => rpt = getRequestPromiseTransformed({
             uri: 'api/beer'
             , port: port
@@ -58,7 +87,7 @@ describe('safe', () => {
     const exp = expected.get;
 
     it('should return the first five rows', () => {
-      return rpt({ headers: { range: 'rows=0-4' } })
+      rpt({ headers: { range: 'rows=0-4' } })
         .should.become(exp.firstFiveRows);
     });
 
@@ -71,7 +100,7 @@ describe('safe', () => {
   describe('head', () => {
     let rpt;
 
-    before(() => common.startServer(sqliteToRestConfig)
+    before(() => common.startServer()
       .then(port => rpt = getRequestPromiseTransformed({ method: 'HEAD', port: port }))
     );
     after(() => common.stopServer());
@@ -89,7 +118,7 @@ describe('safe', () => {
   describe('get', () => {
     let rpt;
 
-    before(() => common.startServer(sqliteToRestConfig)
+    before(() => common.startServer()
       .then(port => rpt = getRequestPromiseTransformed({ uri: 'beer', port: port }))
     );
     after(() => common.stopServer());
@@ -173,10 +202,61 @@ describe('safe', () => {
     });
   });
 
+  describe('get - big', function() {
+    this.timeout(60000);
+
+    const pathToStreamOut = path.join(__dirname, 'tmp/result.json');
+    let port;
+
+    before(() => {
+      const configOverrides = {
+        tablesAndViews: {
+          beer: {
+            maxRange: Infinity
+          }
+        }
+      }
+
+      const dbPath = path.join(__dirname, 'resources/big.beer.sqlite3');
+
+      return Promise.all([
+          common.startServer({ dbPath, configOverrides }),
+          makeDir(path.dirname(pathToStreamOut))
+        ])
+        .then(([serverPort]) => {
+          port = serverPort;
+        });
+    });
+    after(() => Promise.all([
+      common.stopServer(),
+      del(pathToStreamOut),
+    ]));
+
+    it('should stream a large response', () => {
+      const writeStream = fs.createWriteStream(pathToStreamOut),
+        expectedLargeResult = path.join(__dirname, 'expected/get-sqlite-router/big-result.json'),
+        resultStream = request.get(`http://localhost:${port}/beer`)
+          .on('response', response => {
+            response.statusCode.should.equal(200);
+            response.headers['content-type'].should.equal('application/octet-stream');
+            response.headers['content-range'].should.equal('rows 0-100015/100015');
+            response.headers['transfer-encoding'].should.equal('chunked');
+          })
+          .on('error', err => {
+            console.error(err)
+          })
+          .pipe(writeStream);
+
+      return bStreamFinished(resultStream)
+        .then(() => bAreFilesEqual(pathToStreamOut, expectedLargeResult))
+        .should.eventually.be.true;
+    })
+  });
+
   describe('Unsupported Methods', () => {
     let rpt;
 
-    before(() => common.startServer(sqliteToRestConfig)
+    before(() => common.startServer()
       .then(port => rpt = getRequestPromiseTransformed({ method: 'PATCH', port: port }))
     );
     after(() => common.stopServer());
@@ -203,7 +283,7 @@ describe('unsafe', () => {
 
     beforeEach(() => bPromise.props({
         unused: ncpAsync(beerDb, beerDbBak)
-        , port: common.startServer(sqliteToRestConfig)
+        , port: common.startServer()
       })
       .then(({ port }) => rpt = getRequestPromiseTransformed({ uri: 'city', method: 'DELETE', port: port }))
     );
@@ -239,7 +319,7 @@ describe('unsafe', () => {
 
     beforeEach(() => bPromise.props({
         unused: ncpAsync(beerDb, beerDbBak)
-        , port: common.startServer(sqliteToRestConfig)
+        , port: common.startServer()
       })
       .then(({ port }) => rpt = getRequestPromiseTransformed({ uri: 'city', method: 'POST', port: port }))
     );
@@ -273,7 +353,7 @@ describe('unsafe', () => {
 
     beforeEach(() => bPromise.props({
         unused: ncpAsync(beerDb, beerDbBak)
-        , port: common.startServer(sqliteToRestConfig)
+        , port: common.startServer()
       })
       .then(({ port }) => {
         rptb = getRequestPromiseTransformed({ qs: { id: 5 }, uri: 'beer', method: 'POST', port: port });
