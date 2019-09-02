@@ -1,6 +1,6 @@
 {
   "name": "sqlite-to-rest",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Create a rest api from an existing sqlite3 database",
   "bin": {
     "sqlite-to-rest": "bin/sqlite-to-rest.js"
@@ -28,7 +28,7 @@
     "koa-bodyparser": "^3.1.0",
     "koa-decoded-querystring": "0.1.1",
     "koa-router": "^7.0.1",
-    "lodash": "^4.12.0",
+    "lodash": "^4.17.15",
     "madonna-fp": "github:olsonpm/madonna-fp",
     "madonna-function": "github:olsonpm/madonna-function",
     "ncp": "^2.0.0",
@@ -44,7 +44,7 @@
     "del": "^4.1.1",
     "filecompare": "^1.0.4",
     "make-dir": "^3.0.0",
-    "mocha": "^2.5.3",
+    "mocha": "^6.2.0",
     "request": "^2.88.0",
     "request-promise": "^3.0.0"
   }
