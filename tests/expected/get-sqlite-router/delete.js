@@ -1,14 +1,12 @@
-'use strict';
-
+'use strict'
 
 //------//
 // Main //
 //------//
 
 const res = {
-  success: getSuccess()
-};
-
+  success: getSuccess(),
+}
 
 //-------------//
 // Helper Fxns //
@@ -16,16 +14,15 @@ const res = {
 
 function getSuccess() {
   return {
-    "statusCode": 204,
-    "headers": {
-      "connection": "close"
-    }
-  };
+    statusCode: 204,
+    headers: {
+      connection: 'close',
+    },
+  }
 }
-
 
 //---------//
 // Exports //
 //---------//
 
-module.exports = res;
+module.exports = res

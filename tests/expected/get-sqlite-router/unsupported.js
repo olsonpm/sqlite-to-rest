@@ -1,15 +1,13 @@
-'use strict';
-
+'use strict'
 
 //------//
 // Main //
 //------//
 
 const res = {
-  beer_per_brewery: getBeer_per_brewery()
-  , beer: getBeer()
-};
-
+  beer_per_brewery: getBeer_per_brewery(),
+  beer: getBeer(),
+}
 
 //-------------//
 // Helper Fxns //
@@ -23,9 +21,9 @@ function getBeer_per_brewery() {
       allow: 'HEAD, GET',
       connection: 'close',
       'content-length': '18',
-      'content-type': 'text/plain; charset=utf-8'
-    }
-  };
+      'content-type': 'text/plain; charset=utf-8',
+    },
+  }
 }
 
 function getBeer() {
@@ -36,14 +34,13 @@ function getBeer() {
       allow: 'HEAD, GET, POST, DELETE',
       connection: 'close',
       'content-length': '18',
-      'content-type': 'text/plain; charset=utf-8'
-    }
-  };
+      'content-type': 'text/plain; charset=utf-8',
+    },
+  }
 }
-
 
 //---------//
 // Exports //
 //---------//
 
-module.exports = res;
+module.exports = res

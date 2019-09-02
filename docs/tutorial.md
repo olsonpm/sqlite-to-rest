@@ -1,14 +1,14 @@
 # Use sqlite-to-rest
 
 This tutorial will initially walk you through creating a simple sqlite database
-to avoid gotchas particular to your existing database.  [Feel free to skip
+to avoid gotchas particular to your existing database. [Feel free to skip
 those steps](#end-of-database-steps)
 
-1. Before you do anything you need a sqlite database to consume.  If you
-don't already have sqlite3 installed (test via `which sqlite3`), then either
-[download a precompiled binary](https://www.sqlite.org/download.html) with the
-cli tools built-in, or more preferably use your package manager to install
-it for you.
+1. Before you do anything you need a sqlite database to consume. If you
+   don't already have sqlite3 installed (test via `which sqlite3`), then either
+   [download a precompiled binary](https://www.sqlite.org/download.html) with the
+   cli tools built-in, or more preferably use your package manager to install
+   it for you.
 
 2. Now that you have the sqlite3 command line tool available, you can create
    your very own beer database.
@@ -20,8 +20,8 @@ it for you.
 
 3. Create your brewery and beer tables.
 
-   *Just a friendly reminder to [enable foreign key support](https://www.sqlite.org/foreignkeys.html#fk_enable)
-   if that sort of thing matters to you*
+   _Just a friendly reminder to [enable foreign key support](https://www.sqlite.org/foreignkeys.html#fk_enable)
+   if that sort of thing matters to you_
 
    ```sql
    CREATE TABLE brewery(
@@ -57,7 +57,7 @@ it for you.
    , (2,'The collaboration of two Craft companies both led by women, New Glarus Brewing and Weyermann Malting, is unique. You hold the result “Two Women” a Classic Country Lager.','Two Women');
    ```
 
-5. Phew, all that copy pasta.  Go ahead and exit.
+5. Phew, all that copy pasta. Go ahead and exit.
    ```sh
    sqlite> .exit
    ```
@@ -70,7 +70,7 @@ it for you.
    $ npm install --global olsonpm/sqlite-to-rest#dev
    ```
 
-   *The cli is very friendly and easy to explore via `sqlite-to-rest --help`*
+   _The cli is very friendly and easy to explore via `sqlite-to-rest --help`_
 
 2. And generate a bare-bones koa server to test against.
 
@@ -91,8 +91,8 @@ it for you.
 
 4. And consume!
 
-   *I have [jq](https://stedolan.github.io/jq/) installed for formatting, though
-   the unformatted output isn't terrible*
+   _I have [jq](https://stedolan.github.io/jq/) installed for formatting, though
+   the unformatted output isn't terrible_
 
    ```sh
    # get all breweries

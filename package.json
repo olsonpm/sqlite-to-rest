@@ -1,13 +1,17 @@
 {
   "name": "sqlite-to-rest",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Create a rest api from an existing sqlite3 database",
   "bin": {
     "sqlite-to-rest": "bin/sqlite-to-rest.js"
   },
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha tests"
+    "test": "mocha tests",
+    "is-pretty": "prettier --check \"**/*.{js,md}\"",
+    "prettify": "prettier --write \"**/*.{js,md}\"",
+    "lint": "eslint \"**/*.js\"",
+    "verify": "npm run is-pretty && npm run lint && npm test"
   },
   "repository": {
     "type": "git",
@@ -42,10 +46,24 @@
     "chai": "^3.5.0",
     "chai-as-promised": "^5.3.0",
     "del": "^4.1.1",
+    "eslint": "^6.3.0",
+    "eslint-config-personal": "github:olsonpm/eslint-config-personal",
     "filecompare": "^1.0.4",
     "make-dir": "^3.0.0",
     "mocha": "^6.2.0",
+    "prettier": "^1.18.2",
     "request": "^2.88.0",
     "request-promise": "^3.0.0"
+  },
+  "eslintConfig": {
+    "extends": "personal",
+    "env": {
+      "mocha": true
+    }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "semi": false
   }
 }
