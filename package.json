@@ -14,7 +14,7 @@
     "url": "git+https://github.com/olsonpm/sqlite-to-rest.git"
   },
   "author": "phil olson",
-  "license": "ISC",
+  "license": "SEE LICENSE IN license.txt",
   "bugs": {
     "url": "https://github.com/olsonpm/sqlite-to-rest/issues"
   },
