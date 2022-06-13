@@ -1,6 +1,6 @@
 {
   "name": "sqlite-to-rest",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Create a rest api from an existing sqlite3 database",
   "bin": {
     "sqlite-to-rest": "bin/sqlite-to-rest.js"
