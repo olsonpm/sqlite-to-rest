@@ -24,10 +24,9 @@
   },
   "homepage": "https://github.com/olsonpm/sqlite-to-rest#readme",
   "dependencies": {
-    "JSONStream": "^1.1.1",
     "bluebird": "^3.4.0",
     "deep-freeze-strict": "^1.1.1",
-    "extensionless": "^0.1.0",
+    "JSONStream": "^1.1.1",
     "koa": "^2.0.0",
     "koa-bodyparser": "^3.1.0",
     "koa-decoded-querystring": "0.1.1",
@@ -38,7 +37,7 @@
     "ncp": "^2.0.0",
     "portfinder": "^1.0.3",
     "require-dir": "^0.3.0",
-    "sqlite3": "^4.0.6",
+    "sqlite3": "^5.0.8",
     "structured-cli": "github:olsonpm/structured-cli#556f823d84a1db3aaab75f9b31f5ce9487da6fd7",
     "through2": "^2.0.1"
   },
