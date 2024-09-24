@@ -8,7 +8,9 @@
 const structuredCli = require('structured-cli'),
   fp = require('lodash/fp'),
   requireDir = require('require-dir'),
-  state = require('../lib/services/state')
+  state = require('../lib/services/state'),
+  pjson = require('../package.json')
+
 //------//
 // Init //
 //------//
@@ -24,4 +26,5 @@ structuredCli.create({
     'A collection of tools exposing the sqlite-to-rest functionality' +
     ' via cli.  All commands here are also exposed on the required object.',
   commands: fp.values(requireDir('../cli/commands')),
+  version: pjson.version,
 })

@@ -38,7 +38,6 @@ function getFirstFiveRows() {
     statusCode: 206,
     body: [whiteRascal].concat(getLatterFourBodyRows()),
     headers: {
-      connection: 'close',
       'content-range': 'rows 0-4/15',
       'content-type': 'application/octet-stream',
       'transfer-encoding': 'chunked',
@@ -51,7 +50,6 @@ function getFirstFiveRowsByNameAsc() {
     statusCode: 206,
     body: getFirstFiveBodyRowsByNameAsc(),
     headers: {
-      connection: 'close',
       'content-range': 'rows 0-4/14',
       'content-type': 'application/octet-stream',
       'transfer-encoding': 'chunked',
@@ -64,7 +62,6 @@ function getFirstFiveRowsByNameDesc() {
     statusCode: 206,
     body: getFirstFiveBodyRowsByNameDesc(),
     headers: {
-      connection: 'close',
       'content-range': 'rows 0-4/14',
       'content-type': 'application/octet-stream',
       'transfer-encoding': 'chunked',
@@ -77,7 +74,6 @@ function getLastFiveRows() {
     statusCode: 206,
     body: getLastFiveBodyRows(),
     headers: {
-      connection: 'close',
       'content-range': 'rows 11-15/15',
       'content-type': 'application/octet-stream',
       'transfer-encoding': 'chunked',
@@ -90,7 +86,6 @@ function getLatterFourRows() {
     statusCode: 200,
     body: getLatterFourBodyRows(),
     headers: {
-      connection: 'close',
       'content-range': 'rows 0-3/3',
       'content-type': 'application/octet-stream',
       'transfer-encoding': 'chunked',
@@ -103,7 +98,6 @@ function getFirstRow() {
     statusCode: 200,
     body: [whiteRascal],
     headers: {
-      connection: 'close',
       'content-range': 'rows 0-0/0',
       'content-type': 'application/octet-stream',
       'transfer-encoding': 'chunked',
@@ -116,7 +110,6 @@ function getNullName() {
     statusCode: 200,
     body: [getBodyNullName()],
     headers: {
-      connection: 'close',
       'content-range': 'rows 0-0/0',
       'content-type': 'application/octet-stream',
       'transfer-encoding': 'chunked',
@@ -176,7 +169,6 @@ function getNamedBelgians() {
     statusCode: 200,
     body: [whiteRascal, thaiStyleWhiteIPA],
     headers: {
-      connection: 'close',
       'content-range': 'rows 0-1/1',
       'content-type': 'application/octet-stream',
       'transfer-encoding': 'chunked',

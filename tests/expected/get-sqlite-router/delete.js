@@ -15,9 +15,6 @@ const res = {
 function getSuccess() {
   return {
     statusCode: 204,
-    headers: {
-      connection: 'close',
-    },
   }
 }
 

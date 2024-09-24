@@ -1,6 +1,6 @@
 {
   "name": "sqlite-to-rest",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Create a rest api from an existing sqlite3 database",
   "bin": {
     "sqlite-to-rest": "bin/sqlite-to-rest.js"
@@ -24,13 +24,13 @@
   },
   "homepage": "https://github.com/olsonpm/sqlite-to-rest#readme",
   "dependencies": {
+    "@koa/bodyparser": "^5.1.1",
     "bluebird": "^3.4.0",
     "deep-freeze-strict": "^1.1.1",
     "JSONStream": "^1.1.1",
-    "koa": "^2.0.0",
-    "koa-bodyparser": "^3.1.0",
+    "koa": "^2.15.3",
     "koa-decoded-querystring": "0.1.1",
-    "koa-router": "^7.0.1",
+    "koa-router": "^12.0.1",
     "lodash": "^4.17.15",
     "madonna-fp": "github:olsonpm/madonna-fp",
     "madonna-function": "github:olsonpm/madonna-function",
@@ -38,31 +38,32 @@
     "portfinder": "^1.0.3",
     "require-dir": "^0.3.0",
     "sqlite3": "^5.0.8",
-    "structured-cli": "github:olsonpm/structured-cli#556f823d84a1db3aaab75f9b31f5ce9487da6fd7",
+    "structured-cli": "github:olsonpm/structured-cli#d299cf432dfdf34393fa5349f42f30cea79a32a3",
     "through2": "^2.0.1"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "chai-as-promised": "^5.3.0",
+    "@olsonpm/eslint-config-personal": "github:olsonpm/eslint-config-personal",
+    "chai": "^4.5.0",
+    "chai-as-promised": "^7.1.2",
+    "chai-subset": "^1.6.0",
     "del": "^4.1.1",
-    "eslint": "^6.3.0",
-    "eslint-config-personal": "github:olsonpm/eslint-config-personal",
+    "eslint": "^8.57.1",
     "filecompare": "^1.0.4",
     "make-dir": "^3.0.0",
-    "mocha": "^6.2.0",
-    "prettier": "^1.18.2",
-    "request": "^2.88.0",
-    "request-promise": "^3.0.0"
+    "mocha": "^9.2.2",
+    "prettier": "^3.3.3",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
   },
   "eslintConfig": {
-    "extends": "personal",
-    "env": {
-      "mocha": true
-    }
+    "extends": "@olsonpm/personal"
   },
   "prettier": {
     "singleQuote": true,
     "trailingComma": "es5",
     "semi": false
+  },
+  "engines": {
+    "node": ">=16"
   }
 }

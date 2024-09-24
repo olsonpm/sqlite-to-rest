@@ -1,8 +1,6 @@
 {
   "allTablesAndViews": {
-    "flags": [
-      "sendContentRangeInHEAD"
-    ]
+    "flags": ["sendContentRangeInHEAD"]
   },
   "tablesAndViews": {
     "beer": {
