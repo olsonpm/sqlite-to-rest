@@ -25,7 +25,6 @@ function getThaiSuccess() {
       'content-length': '107',
       'content-location': '/beer?id=5',
       'content-type': 'application/json; charset=utf-8',
-      connection: 'close',
     },
   }
 }

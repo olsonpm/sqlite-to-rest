@@ -19,7 +19,6 @@ function getBeer_per_brewery() {
     body: 'Method Not Allowed',
     headers: {
       allow: 'HEAD, GET',
-      connection: 'close',
       'content-length': '18',
       'content-type': 'text/plain; charset=utf-8',
     },
@@ -32,7 +31,6 @@ function getBeer() {
     body: 'Method Not Allowed',
     headers: {
       allow: 'HEAD, GET, POST, DELETE',
-      connection: 'close',
       'content-length': '18',
       'content-type': 'text/plain; charset=utf-8',
     },

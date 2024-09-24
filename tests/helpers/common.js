@@ -7,7 +7,7 @@
 const bPromise = require('bluebird'),
   fp = require('lodash/fp'),
   Koa = require('koa'),
-  koaBodyparser = require('koa-bodyparser'),
+  { bodyParser: koaBodyparser } = require('@koa/bodyparser'),
   path = require('path'),
   portfinder = require('portfinder'),
   sqliteToRest = require('../../lib'),
@@ -42,7 +42,7 @@ const startServer = ({ dbPath = defaultDbPath, configOverrides = {} } = {}) => {
     })
     .then(({ router, port }) =>
       bPromise
-        .fromCallback(cb => {
+        .fromCallback((cb) => {
           server = app
             .use(router.routes())
             .use(router.allowedMethods())
@@ -52,7 +52,7 @@ const startServer = ({ dbPath = defaultDbPath, configOverrides = {} } = {}) => {
     )
 }
 
-const stopServer = () => bPromise.fromCallback(cb => server.close(cb))
+const stopServer = () => bPromise.fromCallback((cb) => server.close(cb))
 
 //---------//
 // Exports //

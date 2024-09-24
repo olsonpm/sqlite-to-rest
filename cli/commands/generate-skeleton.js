@@ -10,7 +10,7 @@ const common = require('../../lib/common'),
 // Init //
 //------//
 
-const isSqliteFileSync = common.isSqliteFileSync
+const isSqlite3FileSync = common.isSqlite3FileSync
 
 //------//
 // Main //
@@ -23,7 +23,7 @@ const command = {
   marg: {
     dbPath: {
       flags: ['require'],
-      custom: { isFile: isSqliteFileSync },
+      custom: { isSqlite3File: isSqlite3FileSync },
     },
   },
   args: [

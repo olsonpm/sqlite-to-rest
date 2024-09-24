@@ -141,7 +141,7 @@ See `sqlite-to-rest --help` for more info.
   const app = new require('koa')(),
     dbPath = 'path/to/your/db.sqlite3'
 
-  getSqliteRouter({ dbPath }).then(router => {
+  getSqliteRouter({ dbPath }).then((router) => {
     app.use(router.routes())
     // ...
   })

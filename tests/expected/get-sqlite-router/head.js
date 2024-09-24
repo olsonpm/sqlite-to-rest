@@ -19,7 +19,6 @@ function getBeer() {
     headers: {
       'accept-order': 'id,brewery_id,description,name',
       'accept-ranges': 'rows',
-      connection: 'close',
       'content-range': 'rows */16',
       'max-range': '5',
     },
@@ -31,7 +30,6 @@ function getBrewery() {
     headers: {
       'accept-order': 'id,state,city_name,name',
       'accept-ranges': 'rows',
-      connection: 'close',
       'content-range': 'rows */5',
       'max-range': '1000',
     },

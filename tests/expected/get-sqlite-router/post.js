@@ -23,7 +23,6 @@ function getEauClaireSuccess() {
       'content-type': 'application/json; charset=utf-8',
       location: '/city?state=WI&city_name=Eau Claire',
       'content-length': '39',
-      connection: 'close',
     },
   }
 }

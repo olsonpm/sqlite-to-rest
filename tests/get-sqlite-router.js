@@ -8,6 +8,7 @@ const bPromise = require('bluebird'),
   bFs = bPromise.promisifyAll(require('fs')),
   chai = require('chai'),
   chaiAsPromised = require('chai-as-promised'),
+  chaiSubset = require('chai-subset'),
   common = require('./helpers/common'),
   del = require('del'),
   errIds = require('../lib/api/helpers/route-builders/err-ids'),
@@ -27,6 +28,7 @@ const bPromise = require('bluebird'),
 // Init //
 //------//
 
+chai.use(chaiSubset)
 chai.use(chaiAsPromised)
 chai.should()
 
@@ -35,10 +37,10 @@ const mapValuesWithKey = utils.mapValuesWithKey,
   beerDb = path.join(resourcesDir, 'beer.sqlite3'),
   beerDbBak = path.join(resourcesDir, 'beer.sqlite3.bak'),
   queryStringsShouldResultInErrors = getQueryStringsShouldResultInErrors(),
-  bStreamFinished = aStream => {
+  bStreamFinished = (aStream) => {
     return new bPromise((resolve, reject) => {
       try {
-        stream.finished(aStream, err => {
+        stream.finished(aStream, (err) => {
           if (err) reject(err)
           else resolve(aStream)
         })
@@ -50,7 +52,7 @@ const mapValuesWithKey = utils.mapValuesWithKey,
   bAreFilesEqual = (fpath1, fpath2) => {
     return new bPromise((resolve, reject) => {
       try {
-        filecompare(fpath1, fpath2, result => {
+        filecompare(fpath1, fpath2, (result) => {
           resolve(result)
         })
       } catch (e) {
@@ -71,7 +73,7 @@ describe('safe', () => {
       const configOverrides = { prefix: '/api' }
 
       return common.startServer({ configOverrides }).then(
-        port =>
+        (port) =>
           (rpt = getRequestPromiseTransformed({
             uri: 'api/beer',
             port: port,
@@ -82,12 +84,14 @@ describe('safe', () => {
 
     const exp = expected.get
 
-    it('should return the first five rows', () => {
-      rpt({ headers: { range: 'rows=0-4' } }).should.become(exp.firstFiveRows)
+    it('should return the first five rows', async () => {
+      await rpt({
+        headers: { range: 'rows=0-4' },
+      }).should.eventually.containSubset(exp.firstFiveRows)
     })
 
-    it('should return a 400', () => {
-      return rpt({
+    it('should return a 400', async () => {
+      await rpt({
         uri: 'beer',
         headers: { range: 'rows=0-4' },
       }).should.eventually.have.property('statusCode', 404)
@@ -101,7 +105,7 @@ describe('safe', () => {
       common
         .startServer()
         .then(
-          port =>
+          (port) =>
             (rpt = getRequestPromiseTransformed({ method: 'HEAD', port: port }))
         )
     )
@@ -109,10 +113,10 @@ describe('safe', () => {
 
     const exp = expected.head
 
-    it('should return the expected successful responses', () => {
-      return bPromise.all([
-        rpt({ uri: 'beer' }).should.become(exp.beer),
-        rpt({ uri: 'brewery' }).should.become(exp.brewery),
+    it('should return the expected successful responses', async () => {
+      await bPromise.all([
+        rpt({ uri: 'beer' }).should.eventually.containSubset(exp.beer),
+        rpt({ uri: 'brewery' }).should.eventually.containSubset(exp.brewery),
       ])
     })
   })
@@ -124,7 +128,7 @@ describe('safe', () => {
       common
         .startServer()
         .then(
-          port =>
+          (port) =>
             (rpt = getRequestPromiseTransformed({ uri: 'beer', port: port }))
         )
     )
@@ -132,10 +136,10 @@ describe('safe', () => {
 
     const qsErrIds = errIds.get.queryString,
       exp = expected.get
-    it('should return the expected successful beer range and order responses', () => {
+    it('should return the expected successful beer range and order responses', async () => {
       // should cover all supported rows syntax variations
-      return bPromise.all([
-        rpt({ headers: { range: 'rows=0-4' } }).should.become(
+      await bPromise.all([
+        rpt({ headers: { range: 'rows=0-4' } }).should.eventually.containSubset(
           exp.firstFiveRows
         ),
 
@@ -145,7 +149,7 @@ describe('safe', () => {
             range: 'rows=0-4',
             order: 'name',
           },
-        }).should.become(exp.firstFiveRowsByNameAsc),
+        }).should.eventually.containSubset(exp.firstFiveRowsByNameAsc),
 
         rpt({
           qss: 'name_NOTNULL',
@@ -153,45 +157,57 @@ describe('safe', () => {
             range: 'rows=0-4',
             order: 'name desc',
           },
-        }).should.become(exp.firstFiveRowsByNameDesc),
+        }).should.eventually.containSubset(exp.firstFiveRowsByNameDesc),
 
-        rpt({ headers: { range: 'rows=0-' } }).should.become(exp.firstFiveRows),
+        rpt({ headers: { range: 'rows=0-' } }).should.eventually.containSubset(
+          exp.firstFiveRows
+        ),
 
-        rpt({ headers: { range: 'rows=-5' } }).should.become(exp.lastFiveRows),
-      ])
-    })
-
-    it('should return the expected successful beer query responses', () => {
-      // should cover all query operators
-      return bPromise.all([
-        rpt({ qss: 'id=1' }).should.become(exp.firstRow),
-
-        rpt({ qss: 'id!=1&id<=5' }).should.become(exp.latterFourRows),
-
-        rpt({ qss: 'id>1&id<=5' }).should.become(exp.latterFourRows),
-
-        rpt({ qss: 'id>=2&id<6' }).should.become(exp.latterFourRows),
-
-        rpt({ qss: 'name_ISNULL' }).should.become(exp.nullName),
-
-        rpt({ qss: "description_LIKE'%Belgian%'&name_NOTNULL" }).should.become(
-          exp.namedBelgians
+        rpt({ headers: { range: 'rows=-5' } }).should.eventually.containSubset(
+          exp.lastFiveRows
         ),
       ])
     })
 
-    it('should return the correct error responses', () => {
+    it('should return the expected successful beer query responses', async () => {
+      // should cover all query operators
+      await bPromise.all([
+        rpt({ qss: 'id=1' }).should.eventually.containSubset(exp.firstRow),
+
+        rpt({ qss: 'id!=1&id<=5' }).should.eventually.containSubset(
+          exp.latterFourRows
+        ),
+
+        rpt({ qss: 'id>1&id<=5' }).should.eventually.containSubset(
+          exp.latterFourRows
+        ),
+
+        rpt({ qss: 'id>=2&id<6' }).should.eventually.containSubset(
+          exp.latterFourRows
+        ),
+
+        rpt({ qss: 'name_ISNULL' }).should.eventually.containSubset(
+          exp.nullName
+        ),
+
+        rpt({
+          qss: "description_LIKE'%Belgian%'&name_NOTNULL",
+        }).should.eventually.containSubset(exp.namedBelgians),
+      ])
+    })
+
+    it('should return the correct error responses', async () => {
       // should cover all errors found in err-ids -> get
       const getAllBeer = rpt
-      return bPromise.all([
-        getAllBeer().should.eventually.have.deep.property(
+      await bPromise.all([
+        getAllBeer().should.eventually.have.nested.property(
           'body.id',
           errIds.get.invalidRange
         ),
 
         rpt({
           headers: { order: 'notAColumn' },
-        }).should.eventually.have.deep.property(
+        }).should.eventually.have.nested.property(
           'body.id',
           errIds.get.invalidOrder
         ),
@@ -207,7 +223,7 @@ describe('safe', () => {
     })
   })
 
-  describe('get - big', function() {
+  describe('get - big', function () {
     this.timeout(60000)
 
     const pathToStreamOut = path.join(__dirname, 'tmp/result.json')
@@ -233,7 +249,7 @@ describe('safe', () => {
     })
     after(() => Promise.all([common.stopServer(), del(pathToStreamOut)]))
 
-    it('should stream a large response', () => {
+    it('should stream a large response', async () => {
       const writeStream = fs.createWriteStream(pathToStreamOut),
         expectedLargeResult = path.join(
           __dirname,
@@ -241,7 +257,7 @@ describe('safe', () => {
         ),
         resultStream = request
           .get(`http://localhost:${port}/beer`)
-          .on('response', response => {
+          .on('response', (response) => {
             response.statusCode.should.equal(200)
             response.headers['content-type'].should.equal(
               'application/octet-stream'
@@ -251,12 +267,12 @@ describe('safe', () => {
             )
             response.headers['transfer-encoding'].should.equal('chunked')
           })
-          .on('error', err => {
+          .on('error', (err) => {
             console.error(err)
           })
           .pipe(writeStream)
 
-      return bStreamFinished(resultStream).then(() =>
+      await bStreamFinished(resultStream).then(() =>
         bAreFilesEqual(pathToStreamOut, expectedLargeResult)
       ).should.eventually.be.true
     })
@@ -267,7 +283,7 @@ describe('safe', () => {
 
     before(() =>
       common.startServer().then(
-        port =>
+        (port) =>
           (rpt = getRequestPromiseTransformed({
             method: 'PATCH',
             port: port,
@@ -278,10 +294,12 @@ describe('safe', () => {
 
     const exp = expected.unsupported
 
-    it('should return the correct 405 responses', () => {
-      return bPromise.all([
-        rpt({ uri: 'beer_per_brewery' }).should.become(exp.beer_per_brewery),
-        rpt({ uri: 'beer' }).should.become(exp.beer),
+    it('should return the correct 405 responses', async () => {
+      await bPromise.all([
+        rpt({ uri: 'beer_per_brewery' }).should.eventually.containSubset(
+          exp.beer_per_brewery
+        ),
+        rpt({ uri: 'beer' }).should.eventually.containSubset(exp.beer),
       ])
     })
   })
@@ -313,22 +331,22 @@ describe('unsafe', () => {
 
     const qsErrIds = errIds.delete.queryString,
       exp = expected.delete
-    it('should return the expected successful beer responses', () => {
-      return rpt({ qss: 'state=WI&city_name=Milwaukee' }).should.become(
-        exp.success
-      )
+    it('should return the expected successful beer responses', async () => {
+      await rpt({
+        qss: 'state=WI&city_name=Milwaukee',
+      }).should.eventually.containSubset(exp.success)
     })
 
-    it('should return 404 on non-existent resource', () => {
-      return rpt({
+    it('should return 404 on non-existent resource', async () => {
+      await rpt({
         qss: 'state=WI&city_name=Eau Claire',
       }).should.eventually.have.property('statusCode', 404)
     })
 
-    it('should return the correct error responses', () => {
+    it('should return the correct error responses', async () => {
       // should cover all errors found in err-ids -> delete
 
-      return queryStringsShouldResultInErrors(rpt, [
+      await queryStringsShouldResultInErrors(rpt, [
         ['state=CO&state=CO', qsErrIds.duplicatePkColumnsNotAllowed],
         ['state>CO', qsErrIds.equalsRequired],
         ['state=CO', qsErrIds.missingPkColumns],
@@ -358,24 +376,24 @@ describe('unsafe', () => {
 
     const rbErrIds = errIds.post.requestBody,
       exp = expected.post
-    it('should return the expected successful beer responses', () => {
-      return rpt({ body: exp.eauClaireSuccess.body }).should.become(
-        exp.eauClaireSuccess
-      )
+    it('should return the expected successful beer responses', async () => {
+      await rpt({
+        body: exp.eauClaireSuccess.body,
+      }).should.eventually.containSubset(exp.eauClaireSuccess)
     })
 
-    it('should return the correct error responses', () => {
+    it('should return the correct error responses', async () => {
       // should cover all errors found in err-ids -> post
 
-      return bPromise.all([
+      await bPromise.all([
         rpt({
           body: { notAColumn: 'error' },
-        }).should.eventually.have.deep.property(
+        }).should.eventually.have.nested.property(
           'body.id',
           rbErrIds.invalidColumns
         ),
 
-        rpt({ body: { state: 'WI' } }).should.eventually.have.deep.property(
+        rpt({ body: { state: 'WI' } }).should.eventually.have.nested.property(
           'body.id',
           rbErrIds.missingRequiredColumns
         ),
@@ -410,24 +428,24 @@ describe('unsafe', () => {
     const rbErrIds = errIds.update.requestBody,
       qsErrIds = errIds.update.queryString,
       exp = expected.post_update
-    it('should return the expected successful beer responses', () => {
-      return rptb({
+    it('should return the expected successful beer responses', async () => {
+      await rptb({
         body: fp.pick('description', exp.thaiSuccess.body),
-      }).should.become(exp.thaiSuccess)
+      }).should.eventually.containSubset(exp.thaiSuccess)
     })
 
-    it('should return the correct error responses', () => {
+    it('should return the correct error responses', async () => {
       // should cover all errors found in err-ids -> update
 
-      return bPromise.all([
+      await bPromise.all([
         rptb({
           body: { notAColumn: 'error' },
-        }).should.eventually.have.deep.property(
+        }).should.eventually.have.nested.property(
           'body.id',
           rbErrIds.invalidColumns
         ),
 
-        rptb().should.eventually.have.deep.property(
+        rptb().should.eventually.have.nested.property(
           'body.id',
           rbErrIds.mustBeNonEmpty
         ),
@@ -451,7 +469,7 @@ const omitDateHeader = mapValuesWithKey((val, key) => {
   return key === 'headers' ? fp.omit('date', val) : val
 })
 
-const getResponse = full => {
+const getResponse = (full) => {
   return fp.has('response.toJSON', full)
     ? full.response.toJSON()
     : fp.invoke('toJSON', full) || full
@@ -464,13 +482,13 @@ const cleanFullResponse = fp.flow(
   omitDateHeader
 )
 
-const allowHttpErrors = err => {
+const allowHttpErrors = (err) => {
   if (err.statusCode) return err
   throw err
 }
 
 function getRequestPromiseTransformed(defaultOpts) {
-  return opts =>
+  return (opts) =>
     rp(getOptions(fp.assign(defaultOpts, opts)))
       .catch(allowHttpErrors)
       .then(cleanFullResponse)
@@ -495,12 +513,12 @@ function getOptions(argsObj) {
 }
 
 function getQueryStringsShouldResultInErrors() {
-  return fp.curry((rpt, pairArr) => {
-    return bPromise.all(fp.map(fp.spread(testQs), pairArr))
+  return fp.curry(async (rpt, pairArr) => {
+    await bPromise.all(fp.map(fp.spread(testQs), pairArr))
 
     // scoped helper fxns
-    function testQs(qss, anErrId) {
-      return rpt({ qss: qss }).should.eventually.have.deep.property(
+    async function testQs(qss, anErrId) {
+      await rpt({ qss: qss }).should.eventually.have.nested.property(
         'body.id',
         anErrId
       )
